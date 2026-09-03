@@ -2,7 +2,7 @@
 # Schema: docs/workflow/state-schema.md
 # Writer: backlog-sync (directly, or delegated by story-orchestrator on activation).
 version: 1
-active_story: US-001
+active_story: null
 story_path: docs/stories/US-001-register-customer.md
 source:
   type: local_only
@@ -11,4 +11,4 @@ source:
   issue_url: null
 activated_at: 2026-08-30T23:50:01Z
 activated_by: harness-migration
-status: IN_PROGRESS
+status: ARCHIVED
