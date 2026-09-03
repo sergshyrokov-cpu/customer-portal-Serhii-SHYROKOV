@@ -39,4 +39,5 @@ out/
 ### VS Code ###
 .vscode/
 /docs/hooks/tool-usage.jsonl
+**/docs/hooks/tool-usage.jsonl
 /docs/harness-consistency-review.md
