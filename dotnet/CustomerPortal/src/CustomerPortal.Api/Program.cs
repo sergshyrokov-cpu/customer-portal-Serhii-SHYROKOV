@@ -1,12 +1,14 @@
+using System.Text;
 using System.Text.Json.Serialization;
 using CustomerPortal.Api.Data;
 using CustomerPortal.Api.ErrorHandling;
 using CustomerPortal.Api.Security;
 using CustomerPortal.Api.Services;
-using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -28,14 +30,29 @@ builder.Services.AddDbContext<CustomerPortalDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("CustomerPortal")));
 
 builder.Services.AddScoped<ICustomerService, CustomerService>();
+builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddSingleton<ITokenService, TokenService>();
 
-// Deny-by-default posture: no identity is ever established, and the fallback
-// policy below requires an authenticated user on every route that doesn't
-// explicitly opt out with [AllowAnonymous]. There is no login flow yet
-// (US-002 is not implemented).
+builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection("Jwt"));
+var jwtOptions = builder.Configuration.GetSection("Jwt").Get<JwtOptions>()
+    ?? throw new InvalidOperationException("Missing required 'Jwt' configuration section.");
+
+// Deny-by-default posture: only a request bearing a valid JWT establishes an
+// identity, and the fallback policy below requires an authenticated user on
+// every route that doesn't explicitly opt out with [AllowAnonymous]. JWT
+// Bearer's default challenge is already a bare 401 (no login redirect), so no
+// custom handler is needed to preserve that posture.
 builder.Services
-    .AddAuthentication(NoOpAuthenticationHandler.SchemeName)
-    .AddScheme<AuthenticationSchemeOptions, NoOpAuthenticationHandler>(NoOpAuthenticationHandler.SchemeName, _ => { });
+    .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidIssuer = jwtOptions.Issuer,
+            ValidAudience = jwtOptions.Audience,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtOptions.SigningKey)),
+        };
+    });
 
 builder.Services.AddAuthorization(options =>
 {
