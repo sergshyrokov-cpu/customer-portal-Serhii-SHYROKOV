@@ -19,7 +19,7 @@ stories:
     path: docs/stories/US-001-register-customer.md
     epic: EPIC-1
     title: Customer Registration
-    state: IN_PROGRESS
+    state: COMPLETED
     source:
       type: local_only
       repository: null
@@ -31,7 +31,7 @@ stories:
     path: docs/stories/US-002-customer-login.md
     epic: EPIC-1
     title: Customer Login
-    state: READY
+    state: COMPLETED
     source:
       type: local_only
       repository: null
@@ -43,7 +43,7 @@ stories:
     path: docs/stories/US-003-customer-profile-view.md
     epic: EPIC-1
     title: View Customer Profile
-    state: BACKLOG
+    state: COMPLETED
     source:
       type: local_only
       repository: null
