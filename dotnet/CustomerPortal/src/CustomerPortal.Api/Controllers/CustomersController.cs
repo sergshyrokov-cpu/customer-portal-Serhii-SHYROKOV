@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using CustomerPortal.Api.ErrorHandling;
 using CustomerPortal.Api.Models.Dto;
 using CustomerPortal.Api.Models.Requests;
@@ -27,5 +28,14 @@ public class CustomersController(ICustomerService customerService) : ControllerB
         CustomerResponse created = await customerService.RegisterAsync(request, cancellationToken);
         string location = $"{Request.Path}/{created.Id}";
         return Created(location, created);
+    }
+
+    [HttpGet("{id:long}")]
+    [Authorize]
+    public async Task<ActionResult<CustomerResponse>> GetProfile(long id, CancellationToken cancellationToken)
+    {
+        long callerId = long.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+        CustomerResponse profile = await customerService.GetProfileAsync(id, callerId, cancellationToken);
+        return Ok(profile);
     }
 }

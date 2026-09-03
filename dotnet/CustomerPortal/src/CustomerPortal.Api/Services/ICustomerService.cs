@@ -6,4 +6,6 @@ namespace CustomerPortal.Api.Services;
 public interface ICustomerService
 {
     Task<CustomerResponse> RegisterAsync(RegistrationRequest request, CancellationToken cancellationToken);
+
+    Task<CustomerResponse> GetProfileAsync(long requestedId, long callerId, CancellationToken cancellationToken);
 }

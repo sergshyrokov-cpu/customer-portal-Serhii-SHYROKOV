@@ -21,6 +21,7 @@ public class ApiExceptionHandler : IExceptionHandler
             DuplicateEmailException => (StatusCodes.Status409Conflict, "Conflict", "An account with this email already exists."),
             InvalidPasswordException => (StatusCodes.Status400BadRequest, "Bad Request", "The submitted password does not meet the security policy."),
             InvalidCredentialsException => (StatusCodes.Status401Unauthorized, "Unauthorized", "Invalid email or password."),
+            ProfileAccessDeniedException => (StatusCodes.Status403Forbidden, "Forbidden", "Access to this resource is denied."),
             _ => (StatusCodes.Status500InternalServerError, "Internal Server Error", "An unexpected error occurred."),
         };
 
