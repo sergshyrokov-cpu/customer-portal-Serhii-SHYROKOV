@@ -45,6 +45,23 @@ public class CustomerService(CustomerPortalDbContext db) : ICustomerService
         return ToResponse(customer);
     }
 
+    public async Task<CustomerResponse> GetProfileAsync(long requestedId, long callerId, CancellationToken cancellationToken)
+    {
+        if (requestedId != callerId)
+        {
+            throw new ProfileAccessDeniedException();
+        }
+
+        Customer? customer = await db.Customers.SingleOrDefaultAsync(c => c.Id == requestedId, cancellationToken);
+
+        if (customer is null)
+        {
+            throw new ProfileAccessDeniedException();
+        }
+
+        return ToResponse(customer);
+    }
+
     private static string NormalizeEmail(string email) => email.Trim().ToLowerInvariant();
 
     private static CustomerResponse ToResponse(Customer customer) =>

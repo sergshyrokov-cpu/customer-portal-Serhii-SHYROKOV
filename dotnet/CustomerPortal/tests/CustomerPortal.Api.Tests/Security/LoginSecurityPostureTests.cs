@@ -14,7 +14,13 @@ namespace CustomerPortal.Api.Tests.Security;
 public class LoginSecurityPostureTests : IClassFixture<CustomerPortalWebApplicationFactory>
 {
     private const string LoginPath = "/api/v1/auth/login";
-    private const string FallbackPath = "/api/v1/customers/999999";
+
+    /// A path with no matching controller route at all, so it always falls
+    /// through to <c>MapFallback</c> — decoupled from
+    /// <c>GET /api/v1/customers/{id}</c>'s own ownership logic (US-003), which
+    /// would otherwise turn a mismatched-id request into a 403, not a 404.
+    private const string FallbackPath = "/api/v1/nonexistent";
+
     private const string ValidPassword = "Aa1!aaaaaaaa";
 
     private readonly CustomerPortalWebApplicationFactory _factory;
