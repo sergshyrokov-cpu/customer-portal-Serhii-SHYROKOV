@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Customer Portal — Demo</title>
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<header>
+  <h1>Customer Portal</h1>
+  <p class="subtitle">Демо-UI поверх REST API (.NET)</p>
+</header>
+
+<main>
+  <section class="card" id="session-card">
+    <h2>Сессия</h2>
+    <p id="session-status">Не выполнен вход.</p>
+    <button id="logout-btn" type="button" hidden>Выйти</button>
+  </section>
+
+  <section class="card">
+    <h2>Регистрация</h2>
+    <form id="register-form">
+      <label>Email
+        <input type="email" name="email" required maxlength="254" placeholder="user@example.com" />
+      </label>
+      <label>Пароль
+        <input type="password" name="password" required placeholder="12-72 байта UTF-8, A-Z, a-z, 0-9, спецсимвол" />
+      </label>
+      <button type="submit">Зарегистрироваться</button>
+    </form>
+    <pre class="result" id="register-result" hidden></pre>
+  </section>
+
+  <section class="card">
+    <h2>Вход</h2>
+    <form id="login-form">
+      <label>Email
+        <input type="email" name="email" required />
+      </label>
+      <label>Пароль
+        <input type="password" name="password" required />
+      </label>
+      <button type="submit">Войти</button>
+    </form>
+    <pre class="result" id="login-result" hidden></pre>
+  </section>
+
+  <section class="card">
+    <h2>Профиль</h2>
+    <form id="profile-form">
+      <label>ID клиента
+        <input type="number" name="id" min="1" required />
+      </label>
+      <button type="submit">Показать профиль</button>
+    </form>
+    <pre class="result" id="profile-result" hidden></pre>
+  </section>
+</main>
+
+<script src="app.js"></script>
+</body>
+</html>

@@ -83,6 +83,17 @@ if (app.Environment.IsDevelopment())
 
 app.UseExceptionHandler();
 
+// Quick demo UI (wwwroot) — served before routing/auth so the static
+// HTML/JS/CSS itself needs no token; the pages call the JSON API, which
+// still enforces [Authorize]/[AllowAnonymous] as usual. Explicit UseRouting
+// here (rather than the implicit one WebApplication would otherwise insert
+// at the very start of the pipeline) keeps endpoint matching — and with it
+// the MapFallback auth check below — from running before static files gets
+// a chance to short-circuit "/" and friends.
+app.UseDefaultFiles();
+app.UseStaticFiles();
+app.UseRouting();
+
 app.UseAuthentication();
 app.UseAuthorization();
 
