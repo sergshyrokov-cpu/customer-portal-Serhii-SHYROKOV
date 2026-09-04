@@ -17,6 +17,14 @@ public class CustomerPortalWebApplicationFactory : WebApplicationFactory<Program
 {
     private readonly SqliteConnection _connection = new("DataSource=:memory:");
 
+    public CustomerPortalWebApplicationFactory()
+    {
+        // Program.cs now requires Jwt:SigningKey to come from the environment
+        // (never committed) — this is that environment for the test host,
+        // which boots before ConfigureWebHost customizations are applied.
+        Environment.SetEnvironmentVariable("Jwt__SigningKey", "test-only-signing-key-do-not-use-elsewhere");
+    }
+
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
         _connection.Open();

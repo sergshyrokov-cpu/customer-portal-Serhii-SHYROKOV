@@ -20,7 +20,7 @@ public class TokenService(IOptions<JwtOptions> options) : ITokenService
     public (string AccessToken, int ExpiresInSeconds) IssueToken(Customer customer)
     {
         var expiry = TimeSpan.FromMinutes(_options.ExpiryMinutes);
-        var signingKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_options.SigningKey));
+        var signingKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_options.SigningKey!));
         var credentials = new SigningCredentials(signingKey, SecurityAlgorithms.HmacSha256);
 
         var claims = new[]

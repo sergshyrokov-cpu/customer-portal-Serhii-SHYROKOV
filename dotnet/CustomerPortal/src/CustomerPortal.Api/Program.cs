@@ -36,6 +36,12 @@ builder.Services.AddSingleton<ITokenService, TokenService>();
 builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection("Jwt"));
 var jwtOptions = builder.Configuration.GetSection("Jwt").Get<JwtOptions>()
     ?? throw new InvalidOperationException("Missing required 'Jwt' configuration section.");
+if (string.IsNullOrWhiteSpace(jwtOptions.SigningKey))
+{
+    throw new InvalidOperationException(
+        "Missing required 'Jwt:SigningKey' configuration value. Set it via the " +
+        "Jwt__SigningKey environment variable (never commit it to appsettings.json).");
+}
 
 // Deny-by-default posture: only a request bearing a valid JWT establishes an
 // identity, and the fallback policy below requires an authenticated user on
@@ -50,7 +56,7 @@ builder.Services
         {
             ValidIssuer = jwtOptions.Issuer,
             ValidAudience = jwtOptions.Audience,
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtOptions.SigningKey)),
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtOptions.SigningKey!)),
         };
     });
 

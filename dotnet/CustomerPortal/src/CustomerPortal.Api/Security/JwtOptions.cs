@@ -1,10 +1,9 @@
 namespace CustomerPortal.Api.Security;
 
 /// <summary>
-/// Bound from the <c>Jwt</c> configuration section. <see cref="SigningKey"/> is a
-/// committed local-dev secret — the same class of accepted simplification as the
-/// blank SQLite/H2 dev credentials used elsewhere in this project; externalize
-/// before any real deployment.
+/// Bound from the <c>Jwt</c> configuration section. <see cref="SigningKey"/> is
+/// never committed — it comes from the <c>Jwt__SigningKey</c> environment
+/// variable (see Program.cs, which fails fast at startup if it's absent).
 /// </summary>
 public class JwtOptions
 {
@@ -12,7 +11,7 @@ public class JwtOptions
 
     public required string Audience { get; set; }
 
-    public required string SigningKey { get; set; }
+    public string? SigningKey { get; set; }
 
     public int ExpiryMinutes { get; set; } = 60;
 }
